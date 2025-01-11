@@ -231,8 +231,8 @@
         // Initialize everything when the page loads
         document.addEventListener('DOMContentLoaded', () => {
             cycleLanguages();
-            animateCounter(document.getElementById('user-count'), 10000);
-            animateCounter(document.getElementById('language-count'), 12);
+            animateCounter(document.getElementById('user-count'), +100);
+            animateCounter(document.getElementById('language-count'), 6);
             loadQuestion();
 
             // Intersection Observer for animations
