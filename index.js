@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./models/Quiz');
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -6,6 +7,7 @@ const path = require('path');
 const app = express();
 const authRoutes = require('./routes/auth');
 const vocabularyRoutes = require('./routes/vocabulary');
+const quizRoutes = require('./routes/quiz');
 
 // Middleware
 app.use(express.json());
@@ -13,6 +15,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/vocabulary', vocabularyRoutes);
+app.use('/api/quiz', quizRoutes);
+
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -28,6 +32,7 @@ app.get('/', (req, res) => {
 });
 app.get('/register', (req, res) => res.render('register'));
 app.get('/login', (req, res) => res.render('login'));
+app.get('/quiz', (req, res) => res.render('quiz'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

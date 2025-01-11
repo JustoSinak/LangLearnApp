@@ -74,6 +74,26 @@
         let userAnswers = [];
 
         async function loadQuiz() {
+            const quiz = {
+                title: "Basic Spanish Verbs",
+                description: "Test your knowledge of common Spanish verbs",
+                language: "spanish",
+                category: "grammar",
+                questions: [
+                    {
+                        question: "What is the Spanish word for 'to eat'?",
+                        options: [
+                            { text: "comer", isCorrect: true },
+                            { text: "beber", isCorrect: false },
+                            { text: "dormir", isCorrect: false }
+                        ],
+                        type: "multiple-choice",
+                        difficulty: "beginner",
+                        languageLevel: "A1"
+                    }
+                    // More questions...
+                ]
+            };
             try {
                 const quizId = new URLSearchParams(window.location.search).get('id');
                 const response = await fetch(`/api/quiz/${quizId}`);
@@ -191,6 +211,7 @@
 
         // Initialize quiz
         loadQuiz();
+        
     </script>
 </body>
 </html>
