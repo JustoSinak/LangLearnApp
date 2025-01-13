@@ -2,6 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+
 const authController = {
   register: async (req, res) => {
     try {
@@ -48,3 +49,70 @@ const authController = {
 };
 
 module.exports = authController;
+
+
+// const User = require('../models/User');
+// const jwt = require('jsonwebtoken');
+
+// const generateToken = (id) => {
+//   return jwt.sign({ id }, process.env.JWT_SECRET, {
+//     expiresIn: '30d'
+//   });
+// };
+
+// exports.register = async (req, res) => {
+//   try {
+//     const { username, email, password, learningPreferences } = req.body;
+
+//     const userExists = await User.findOne({ email });
+//     if (userExists) {
+//       return res.status(400).json({ error: 'User already exists' });
+//     }
+
+//     const user = await User.create({
+//       username,
+//       email,
+//       password,
+//       learningPreferences
+//     });
+
+//     const token = generateToken(user._id);
+
+//     res.status(201).json({
+//       user: {
+//         id: user._id,
+//         username: user.username,
+//         email: user.email,
+//         learningPreferences: user.learningPreferences
+//       },
+//       token
+//     });
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
+
+// exports.login = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     const user = await User.findOne({ email });
+//     if (!user || !(await user.isValidPassword(password))) {
+//       return res.status(401).json({ error: 'Invalid credentials' });
+//     }
+
+//     const token = generateToken(user._id);
+
+//     res.json({
+//       user: {
+//         id: user._id,
+//         username: user.username,
+//         email: user.email,
+//         learningPreferences: user.learningPreferences
+//       },
+//       token
+//     });
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
