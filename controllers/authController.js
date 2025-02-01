@@ -7,6 +7,10 @@ const authController = {
   register: async (req, res) => {
     try {
       const { username, email, password } = req.body;
+      const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+        if (existingUser) {
+          return res.status(400).json({ message: 'User already exists' });
+        }
       const hashedPassword = await bcrypt.hash(password, 10);
       
       const user = await User.create({
@@ -15,10 +19,31 @@ const authController = {
         password: hashedPassword
       });
       
-      res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
+    //   res.status(201).json({ message: 'User registered successfully' });
+    // } catch (error) {
+    //   res.status(500).json({ error: error.message });
+    // }
+    await user.save();
+
+    // Generate token
+    const token = jwt.sign(
+        { userId: user._id },
+        process.env.JWT_SECRET,
+        { expiresIn: '24h' }
+    );
+
+    res.status(201).json({
+        message: 'User created successfully',
+        token,
+        user: {
+            id: user._id,
+            username: user.username,
+            email: user.email
+        }
+    });
+  } catch (error) {
+      res.status(500).json({ message: 'Error creating user', error: error.message });
+  }
   },
 
   login: async (req, res) => {
@@ -41,7 +66,14 @@ const authController = {
         { expiresIn: '24h' }
       );
       
-      res.json({ token });
+      res.json({ 
+        token,
+        user: {
+            id: user._id,
+            username: user.username,
+            email: user.email
+        }
+      });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

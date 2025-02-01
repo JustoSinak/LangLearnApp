@@ -48,5 +48,6 @@ const flashcardSchema = new mongoose.Schema({
   }, {
     timestamps: true
   });
-  const Flashcards = model('Flashcards', flashcardSchema);
+
+  const Flashcards = mongoose.model('Flashcards', flashcardSchema);
 module.exports={Flashcards};
