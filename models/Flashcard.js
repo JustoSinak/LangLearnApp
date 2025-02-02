@@ -1,53 +1,14 @@
-const mongoose = require('mongoose');
-const flashcardSchema = new mongoose.Schema({
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
-    },
-    vocabulary: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Vocabulary',
-      required: true
-    },
-    deck: {
-      type: String,
-      required: [true, 'Deck name is required'],
-      trim: true
-    },
-    front: {
-      type: String,
-      required: [true, 'Front content is required']
-    },
-    back: {
-      type: String,
-      required: [true, 'Back content is required']
-    },
-    notes: String,
-    reviewStatus: {
-      type: String,
-      enum: ['new', 'learning', 'review', 'mastered'],
-      default: 'new'
-    },
-    nextReviewDate: {
-      type: Date,
-      default: Date.now
-    },
-    reviewHistory: [{
-      date: {
-        type: Date,
-        default: Date.now
-      },
-      performance: {
-        type: String,
-        enum: ['again', 'hard', 'good', 'easy'],
-        required: true
-      },
-      timeSpent: Number // in seconds
-    }]
-  }, {
-    timestamps: true
-  });
+import mongoose from 'mongoose';
 
-  const Flashcards = mongoose.model('Flashcards', flashcardSchema);
-module.exports={Flashcards};
+const flashcardSchema = new mongoose.Schema({
+  front: { type: String, required: true },
+  back: { type: String, required: true },
+  category: { type: String, default: 'general' },
+  interval: { type: Number, default: 1 }, // Days until next review
+  repetitions: { type: Number, default: 0 },
+  difficulty: { type: Number, default: 3 }, // 1-5 scale
+  nextReview: { type: Date, default: Date.now },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+});
+
+export default mongoose.model('Flashcard', flashcardSchema);
