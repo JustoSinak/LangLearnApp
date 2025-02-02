@@ -1,40 +1,24 @@
-require('dotenv').config();
-require('./models/Quiz');
-const express = require('express');
-const mongoose = require('mongoose');
-const path = require('path');
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import connectDB from './config/db.js';
+import authRoutes from './routes/authRoutes.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
-const authRoutes = require('./routes/auth');
-const vocabularyRoutes = require('./routes/vocabulary');
-const quizRoutes = require('./routes/quiz');
 
 // Middleware
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.static('public'));
 
+// Database Connection
+connectDB();
+
+// Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/vocabulary', vocabularyRoutes);
-app.use('/api/quiz', quizRoutes);
 
-
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-// Database connection
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
-
-// Routes (to be added)
-app.get('/', (req, res) => {
-  res.render('index');
-});
-app.get('/register', (req, res) => res.render('register'));
-app.get('/login', (req, res) => res.render('login'));
-app.get('/quiz', (req, res) => res.render('quiz'));
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
