@@ -1,72 +1,69 @@
-import Quiz from '../models/Quiz.js';
-import Vocabulary from '../models/Vocabulary.js';
-import Grammar from '../models/Grammar.js';
+const  Quiz  = require('../models/Quiz');
 
-export const generateQuiz = async (req, res) => {
-  try {
-    const { type, count = 10 } = req.body;
-    const user = req.user;
-    
-    let questions = [];
-    
-    if (type === 'vocabulary' || type === 'mixed') {
-      const vocab = await Vocabulary.aggregate([
-        { $match: { userId: user._id } },
-        { $sample: { size: Math.floor(count/2) } }
-      ]);
-      questions.push(...vocab.map(q => ({
-        type: 'vocabulary',
-        question: q.word,
-        correctAnswer: q.translation
-      })));
+const quizController = {
+    // Generate quiz
+    generateQuiz: async (req, res) => {
+        try {
+            const { difficulty, type } = req.query;
+            const quiz = await Quiz.aggregate([
+                { $match: { difficulty, 'questions.type': type } },
+                { $sample: { size: 1 } }
+            ]);
+
+            if (!quiz.length) {
+                return res.status(404).json({ message: 'No quiz available' });
+            }
+
+            // Remove correct answers before sending to client
+            const clientQuiz = {
+                ...quiz[0],
+                questions: quiz[0].questions.map(q => ({
+                    ...q,
+                    correctAnswer: undefined
+                }))
+            };
+
+            res.json(clientQuiz);
+        } catch (error) {
+            res.status(500).json({ message: 'Error generating quiz', error: error.message });
+        }
+    },
+
+    // Submit quiz answers
+    submitQuiz: async (req, res) => {
+        try {
+            const { quizId, answers } = req.body;
+            const quiz = await Quiz.findById(quizId);
+
+            if (!quiz) {
+                return res.status(404).json({ message: 'Quiz not found' });
+            }
+
+            // Calculate score
+            let score = 0;
+            const results = quiz.questions.map((question, index) => {
+                const isCorrect = question.correctAnswer === answers[index];
+                if (isCorrect) score++;
+                return {
+                    question: question.question,
+                    userAnswer: answers[index],
+                    correctAnswer: question.correctAnswer,
+                    isCorrect
+                };
+            });
+
+            const scorePercentage = (score / quiz.questions.length) * 100;
+
+            res.json({
+                score: scorePercentage,
+                totalQuestions: quiz.questions.length,
+                correctAnswers: score,
+                results
+            });
+        } catch (error) {
+            res.status(500).json({ message: 'Error submitting quiz', error: error.message });
+        }
     }
-    
-    if (type === 'grammar' || type === 'mixed') {
-      const grammar = await Grammar.aggregate([
-        { $match: { userId: user._id } },
-        { $sample: { size: Math.ceil(count/2) } }
-      ]);
-      questions.push(...grammar.map(q => ({
-        type: 'grammar',
-        question: q.rule,
-        correctAnswer: q.examples[0]
-      })));
-    }
-    
-    res.json(questions);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
 };
 
-export const submitQuiz = async (req, res) => {
-  try {
-    const { answers } = req.body;
-    let score = 0;
-    const details = [];
-    
-    for (const answer of answers) {
-      const isCorrect = answer.userAnswer === answer.correctAnswer;
-      if (isCorrect) score++;
-      details.push({
-        question: answer.question,
-        userAnswer: answer.userAnswer,
-        correctAnswer: answer.correctAnswer,
-        isCorrect
-      });
-    }
-    
-    const quiz = new Quiz({
-      type: req.body.type,
-      score,
-      totalQuestions: answers.length,
-      details,
-      userId: req.user.id
-    });
-    
-    await quiz.save();
-    res.json(quiz);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-};
+module.exports = quizController;
