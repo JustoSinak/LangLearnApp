@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <%- include('layouts/main', {title: 'Dashboard'}) %>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Streak Card -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold mb-2">Current Streak</h3>
+        <div class="flex items-center">
+            <span class="text-3xl font-bold text-blue-600" id="currentStreak">0</span>
+            <span class="ml-2">days</span>
+        </div>
+        <p class="text-sm text-gray-600 mt-2">Longest streak: <span id="longestStreak">0</span> days</p>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold mb-2">Today's Progress</h3>
+        <ul class="space-y-2">
+            <li>Words Learned: <span id="wordsLearned">0</span></li>
+            <li>Quizzes Completed: <span id="quizzesCompleted">0</span></li>
+            <li>Cards Reviewed: <span id="cardsReviewed">0</span></li>
+        </ul>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="bg-white rounded-lg shadow p-6 md:col-span-2">
+        <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
+        <div class="space-y-4" id="recentActivity">
+            <!-- Activities will be populated here -->
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <a href="/vocabulary" class="bg-blue-600 text-white rounded-lg p-6 hover:bg-blue-700 transition">
+        <h3 class="text-lg font-semibold mb-2">Practice Vocabulary</h3>
+        <p class="text-sm opacity-90">Learn new words and review your progress</p>
+    </a>
+    
+    <a href="/flashcards" class="bg-green-600 text-white rounded-lg p-6 hover:bg-green-700 transition">
+        <h3 class="text-lg font-semibold mb-2">Review Flashcards</h3>
+        <p class="text-sm opacity-90">Review your personalized flashcard deck</p>
+    </a>
+    
+    <a href="/quizzes" class="bg-purple-600 text-white rounded-lg p-6 hover:bg-purple-700 transition">
+        <h3 class="text-lg font-semibold mb-2">Take a Quiz</h3>
+        <p class="text-sm opacity-90">Test your knowledge with interactive quizzes</p>
+    </a>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const response = await axios.get('/api/dashboard/stats', {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        
+        const { streak, todayStats, recentActivity } = response.data;
+        
+        // Update streak
+        document.getElementById('currentStreak').textContent = streak.current;
+        document.getElementById('longestStreak').textContent = streak.longest;
+        
+        // Update today's stats
+        document.getElementById('wordsLearned').textContent = todayStats.wordsLearned;
+        document.getElementById('quizzesCompleted').textContent = todayStats.quizzesCompleted;
+        document.getElementById('cardsReviewed').textContent = todayStats.cardsReviewed;
+        
+        // Update recent activity
+        const activityContainer = document.getElementById('recentActivity');
+        activityContainer.innerHTML = recentActivity.map(activity => `
+            <div class="flex items-center justify-between py-2 border-b">
+                <div>
+                    <p class="font-medium">${activity.type}</p>
+                    <p class="text-sm text-gray-600">${activity.description}</p>
+                </div>
+                <span class="text-sm text-gray-500">${new Date(activity.date).toLocaleDateString()}</span>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+    }
+});
+</script>
+</body>
+</html>
