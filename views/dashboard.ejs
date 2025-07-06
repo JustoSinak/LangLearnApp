@@ -1,94 +1,514 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard - LinguaLearn</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #0EA5E9;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --neutral: #F8FAFC;
+            --dark: #0F172A;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--neutral) 0%, #E0F2FE 100%);
+        }
+
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(14, 165, 233, 0.1); }
+        .floating { animation: float 6s ease-in-out infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #0284C7 100%);
+            border: none;
+            color: white;
+        }
+    </style>
 </head>
-<body>
-    <%- include('layouts/main', {title: 'Dashboard'}) %>
-
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    <!-- Streak Card -->
-    <div class="bg-white rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold mb-2">Current Streak</h3>
-        <div class="flex items-center">
-            <span class="text-3xl font-bold text-blue-600" id="currentStreak">0</span>
-            <span class="ml-2">days</span>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+    <!-- Navigation -->
+    <div class="navbar bg-white/80 backdrop-blur-md shadow-lg sticky top-0 z-50">
+        <div class="navbar-start">
+            <a href="/" class="btn btn-ghost text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                <i class="fas fa-globe text-primary mr-2"></i>LinguaLearn
+            </a>
         </div>
-        <p class="text-sm text-gray-600 mt-2">Longest streak: <span id="longestStreak">0</span> days</p>
-    </div>
-
-    <!-- Quick Stats -->
-    <div class="bg-white rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold mb-2">Today's Progress</h3>
-        <ul class="space-y-2">
-            <li>Words Learned: <span id="wordsLearned">0</span></li>
-            <li>Quizzes Completed: <span id="quizzesCompleted">0</span></li>
-            <li>Cards Reviewed: <span id="cardsReviewed">0</span></li>
-        </ul>
-    </div>
-
-    <!-- Recent Activity -->
-    <div class="bg-white rounded-lg shadow p-6 md:col-span-2">
-        <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
-        <div class="space-y-4" id="recentActivity">
-            <!-- Activities will be populated here -->
+        <div class="navbar-center hidden lg:flex">
+            <ul class="menu menu-horizontal px-1">
+                <li><a href="/vocabulary" class="hover:text-primary">
+                    <i class="fas fa-book mr-2"></i>Vocabulary
+                </a></li>
+                <li><a href="/grammar" class="hover:text-primary">
+                    <i class="fas fa-spell-check mr-2"></i>Grammar
+                </a></li>
+                <li><a href="/flashcards" class="hover:text-primary">
+                    <i class="fas fa-layer-group mr-2"></i>Flashcards
+                </a></li>
+                <li><a href="/quiz" class="hover:text-primary">
+                    <i class="fas fa-brain mr-2"></i>Quiz
+                </a></li>
+            </ul>
         </div>
-    </div>
-</div>
-
-<!-- Quick Actions -->
-<div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-    <a href="/vocabulary" class="bg-blue-600 text-white rounded-lg p-6 hover:bg-blue-700 transition">
-        <h3 class="text-lg font-semibold mb-2">Practice Vocabulary</h3>
-        <p class="text-sm opacity-90">Learn new words and review your progress</p>
-    </a>
-    
-    <a href="/flashcards" class="bg-green-600 text-white rounded-lg p-6 hover:bg-green-700 transition">
-        <h3 class="text-lg font-semibold mb-2">Review Flashcards</h3>
-        <p class="text-sm opacity-90">Review your personalized flashcard deck</p>
-    </a>
-    
-    <a href="/quizzes" class="bg-purple-600 text-white rounded-lg p-6 hover:bg-purple-700 transition">
-        <h3 class="text-lg font-semibold mb-2">Take a Quiz</h3>
-        <p class="text-sm opacity-90">Test your knowledge with interactive quizzes</p>
-    </a>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const response = await axios.get('/api/dashboard/stats', {
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        });
-        
-        const { streak, todayStats, recentActivity } = response.data;
-        
-        // Update streak
-        document.getElementById('currentStreak').textContent = streak.current;
-        document.getElementById('longestStreak').textContent = streak.longest;
-        
-        // Update today's stats
-        document.getElementById('wordsLearned').textContent = todayStats.wordsLearned;
-        document.getElementById('quizzesCompleted').textContent = todayStats.quizzesCompleted;
-        document.getElementById('cardsReviewed').textContent = todayStats.cardsReviewed;
-        
-        // Update recent activity
-        const activityContainer = document.getElementById('recentActivity');
-        activityContainer.innerHTML = recentActivity.map(activity => `
-            <div class="flex items-center justify-between py-2 border-b">
-                <div>
-                    <p class="font-medium">${activity.type}</p>
-                    <p class="text-sm text-gray-600">${activity.description}</p>
+        <div class="navbar-end">
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                    <div class="w-10 rounded-full">
+                        <img alt="User avatar" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                    </div>
                 </div>
-                <span class="text-sm text-gray-500">${new Date(activity.date).toLocaleDateString()}</span>
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 text-base-content rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/settings">Settings</a></li>
+                    <li><a onclick="logout()">Logout</a></li>
+                </ul>
             </div>
-        `).join('');
-    } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-    }
-});
-</script>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Welcome Header -->
+        <div class="mb-8 animate__animated animate__fadeInDown">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Welcome back! 👋</h1>
+            <p class="text-gray-600 text-lg">Ready to continue your language learning journey?</p>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Streak Card -->
+            <div class="card text-white shadow-xl card-hover animate__animated animate__fadeInUp" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);">
+                <div class="card-body">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold opacity-90">Current Streak</h3>
+                            <div class="flex items-center mt-2">
+                                <span class="text-4xl font-bold" id="currentStreak">0</span>
+                                <i class="fas fa-fire ml-2 text-2xl"></i>
+                            </div>
+                            <p class="text-sm opacity-75 mt-1">Longest: <span id="longestStreak">0</span> days</p>
+                        </div>
+                        <div class="text-6xl opacity-20">📅</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Words Learned -->
+            <div class="card text-white shadow-xl card-hover animate__animated animate__fadeInUp" style="background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%); animation-delay: 0.1s;">
+                <div class="card-body">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold opacity-90">Words Learned</h3>
+                            <div class="flex items-center mt-2">
+                                <span class="text-4xl font-bold" id="totalWords">0</span>
+                                <i class="fas fa-book ml-2 text-2xl"></i>
+                            </div>
+                            <p class="text-sm opacity-75 mt-1">Today: <span id="wordsToday">0</span></p>
+                        </div>
+                        <div class="text-6xl opacity-20">📖</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Score -->
+            <div class="card text-white shadow-xl card-hover animate__animated animate__fadeInUp" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); animation-delay: 0.2s;">
+                <div class="card-body">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold opacity-90">Average Score</h3>
+                            <div class="flex items-center mt-2">
+                                <span class="text-4xl font-bold" id="averageScore">0</span>
+                                <span class="ml-1 text-2xl">%</span>
+                                <i class="fas fa-bullseye ml-2 text-2xl"></i>
+                            </div>
+                            <p class="text-sm opacity-75 mt-1">Quizzes: <span id="totalQuizzes">0</span></p>
+                        </div>
+                        <div class="text-6xl opacity-20">🎯</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Level Progress -->
+            <div class="card text-white shadow-xl card-hover animate__animated animate__fadeInUp" style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); animation-delay: 0.3s;">
+                <div class="card-body">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold opacity-90">Level</h3>
+                            <div class="flex items-center mt-2">
+                                <span class="text-4xl font-bold" id="currentLevel">1</span>
+                                <i class="fas fa-star ml-2 text-2xl" style="color: #F59E0B;"></i>
+                            </div>
+                            <div class="mt-2">
+                                <progress class="progress w-full h-2" value="0" max="100" id="levelProgress" style="background: rgba(245, 158, 11, 0.3);"></progress>
+                                <p class="text-xs opacity-75 mt-1"><span id="currentXP">0</span>/<span id="nextLevelXP">100</span> XP</p>
+                            </div>
+                        </div>
+                        <div class="text-6xl opacity-20">🏆</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Learning Progress Chart -->
+            <div class="lg:col-span-2">
+                <div class="card bg-white shadow-xl animate__animated animate__fadeInLeft">
+                    <div class="card-body">
+                        <h3 class="card-title mb-4">Learning Progress</h3>
+                        <div class="h-64">
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Goals -->
+            <div class="card bg-white shadow-xl animate__animated animate__fadeInRight">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Today's Goals</h3>
+                    <div class="space-y-4">
+                        <!-- Vocabulary Goal -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium">Learn 10 new words</span>
+                                <span class="text-sm text-gray-500" id="vocabGoalProgress">0/10</span>
+                            </div>
+                            <progress class="progress progress-primary w-full" value="0" max="100" id="vocabGoal"></progress>
+                        </div>
+
+                        <!-- Quiz Goal -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium">Complete 3 quizzes</span>
+                                <span class="text-sm text-gray-500" id="quizGoalProgress">0/3</span>
+                            </div>
+                            <progress class="progress progress-secondary w-full" value="0" max="100" id="quizGoal"></progress>
+                        </div>
+
+                        <!-- Study Time Goal -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium">Study for 30 minutes</span>
+                                <span class="text-sm text-gray-500" id="timeGoalProgress">0/30 min</span>
+                            </div>
+                            <progress class="progress progress-accent w-full" value="0" max="100" id="timeGoal"></progress>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="mt-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Quick Actions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="/vocabulary" class="card text-white shadow-xl card-hover animate__animated animate__fadeInUp" style="background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);">
+                    <div class="card-body text-center">
+                        <i class="fas fa-book text-4xl mb-4"></i>
+                        <h3 class="card-title justify-center text-white mb-2">Vocabulary</h3>
+                        <p class="text-sm opacity-90">Learn new words and expand your vocabulary</p>
+                        <div class="card-actions justify-center mt-4">
+                            <div class="badge" style="background: #F59E0B; color: white;">5 new words</div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="/grammar" class="card text-white shadow-xl card-hover animate__animated animate__fadeInUp" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); animation-delay: 0.1s;">
+                    <div class="card-body text-center">
+                        <i class="fas fa-spell-check text-4xl mb-4"></i>
+                        <h3 class="card-title justify-center text-white mb-2">Grammar</h3>
+                        <p class="text-sm opacity-90">Master grammar rules with interactive exercises</p>
+                        <div class="card-actions justify-center mt-4">
+                            <div class="badge" style="background: #F59E0B; color: white;">3 lessons</div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="/flashcards" class="card text-white shadow-xl card-hover animate__animated animate__fadeInUp" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); animation-delay: 0.2s;">
+                    <div class="card-body text-center">
+                        <i class="fas fa-layer-group text-4xl mb-4"></i>
+                        <h3 class="card-title justify-center text-white mb-2">Flashcards</h3>
+                        <p class="text-sm opacity-90">Review cards with spaced repetition</p>
+                        <div class="card-actions justify-center mt-4">
+                            <div class="badge" style="background: #0EA5E9; color: white;">12 due</div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="/quiz" class="card text-white shadow-xl card-hover animate__animated animate__fadeInUp" style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); animation-delay: 0.3s;">
+                    <div class="card-body text-center">
+                        <i class="fas fa-brain text-4xl mb-4"></i>
+                        <h3 class="card-title justify-center text-white mb-2">Quiz</h3>
+                        <p class="text-sm opacity-90">Test your knowledge with adaptive quizzes</p>
+                        <div class="card-actions justify-center mt-4">
+                            <div class="badge" style="background: #F59E0B; color: white;">New quiz</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Activity & Achievements -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+            <!-- Recent Activity -->
+            <div class="card bg-white shadow-xl animate__animated animate__fadeInLeft">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Recent Activity</h3>
+                    <div class="space-y-4" id="recentActivity">
+                        <!-- Sample activities -->
+                        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                                📚
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium">Completed Vocabulary Lesson</p>
+                                <p class="text-sm text-gray-600">Learned 8 new Spanish words</p>
+                            </div>
+                            <span class="text-sm text-gray-500">2 hours ago</span>
+                        </div>
+
+                        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white">
+                                🎯
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium">Quiz Completed</p>
+                                <p class="text-sm text-gray-600">Scored 85% on Grammar Quiz</p>
+                            </div>
+                            <span class="text-sm text-gray-500">5 hours ago</span>
+                        </div>
+
+                        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                            <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white">
+                                🃏
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium">Flashcard Review</p>
+                                <p class="text-sm text-gray-600">Reviewed 25 flashcards</p>
+                            </div>
+                            <span class="text-sm text-gray-500">1 day ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements -->
+            <div class="card bg-white shadow-xl animate__animated animate__fadeInRight">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Recent Achievements</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                            <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xl">
+                                🏆
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium text-yellow-800">Week Warrior</p>
+                                <p class="text-sm text-yellow-600">Maintained a 7-day streak</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                            <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl">
+                                📚
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium text-blue-800">Vocabulary Master</p>
+                                <p class="text-sm text-blue-600">Learned 100 new words</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4 p-3 bg-green-50 rounded-lg border border-green-200">
+                            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white text-xl">
+                                🎯
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium text-green-800">Quiz Champion</p>
+                                <p class="text-sm text-green-600">Scored 90%+ on 5 quizzes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let progressChart;
+
+        // Animated counter function
+        function animateCounter(element, target, duration = 2000) {
+            let start = 0;
+            const increment = target / (duration / 16);
+
+            function updateCounter() {
+                start += increment;
+                if (start < target) {
+                    element.textContent = Math.floor(start);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = target;
+                }
+            }
+
+            updateCounter();
+        }
+
+        // Initialize progress chart
+        function initProgressChart() {
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            progressChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Words Learned',
+                        data: [12, 19, 8, 15, 22, 18, 25],
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Quiz Scores',
+                        data: [85, 78, 92, 88, 95, 82, 90],
+                        borderColor: 'rgb(16, 185, 129)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                // Simulate API call - replace with actual API endpoint
+                const mockData = {
+                    streak: { current: 7, longest: 15 },
+                    stats: {
+                        totalWords: 245,
+                        wordsToday: 8,
+                        averageScore: 87,
+                        totalQuizzes: 23,
+                        currentLevel: 5,
+                        currentXP: 750,
+                        nextLevelXP: 1000
+                    },
+                    goals: {
+                        vocab: { current: 8, target: 10 },
+                        quiz: { current: 2, target: 3 },
+                        time: { current: 25, target: 30 }
+                    }
+                };
+
+                // Update stats with animation
+                animateCounter(document.getElementById('currentStreak'), mockData.streak.current);
+                animateCounter(document.getElementById('longestStreak'), mockData.streak.longest);
+                animateCounter(document.getElementById('totalWords'), mockData.stats.totalWords);
+                animateCounter(document.getElementById('wordsToday'), mockData.stats.wordsToday);
+                animateCounter(document.getElementById('averageScore'), mockData.stats.averageScore);
+                animateCounter(document.getElementById('totalQuizzes'), mockData.stats.totalQuizzes);
+                animateCounter(document.getElementById('currentLevel'), mockData.stats.currentLevel);
+                animateCounter(document.getElementById('currentXP'), mockData.stats.currentXP);
+                animateCounter(document.getElementById('nextLevelXP'), mockData.stats.nextLevelXP);
+
+                // Update progress bars
+                const levelProgress = (mockData.stats.currentXP / mockData.stats.nextLevelXP) * 100;
+                document.getElementById('levelProgress').value = levelProgress;
+
+                // Update goals
+                const vocabProgress = (mockData.goals.vocab.current / mockData.goals.vocab.target) * 100;
+                document.getElementById('vocabGoal').value = vocabProgress;
+                document.getElementById('vocabGoalProgress').textContent = `${mockData.goals.vocab.current}/${mockData.goals.vocab.target}`;
+
+                const quizProgress = (mockData.goals.quiz.current / mockData.goals.quiz.target) * 100;
+                document.getElementById('quizGoal').value = quizProgress;
+                document.getElementById('quizGoalProgress').textContent = `${mockData.goals.quiz.current}/${mockData.goals.quiz.target}`;
+
+                const timeProgress = (mockData.goals.time.current / mockData.goals.time.target) * 100;
+                document.getElementById('timeGoal').value = timeProgress;
+                document.getElementById('timeGoalProgress').textContent = `${mockData.goals.time.current}/${mockData.goals.time.target} min`;
+
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDashboardData();
+            initProgressChart();
+
+            // Add intersection observer for animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            // Observe cards for animations
+            document.querySelectorAll('.card-hover').forEach(card => {
+                observer.observe(card);
+            });
+
+            // Add hover effects
+            document.querySelectorAll('.card-hover').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
 </body>
 </html>

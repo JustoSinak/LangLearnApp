@@ -6,7 +6,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - LinguaLearn</title>
-    <link href="/css/output.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
 <body class="min-h-screen bg-base-200">
     <div class="navbar bg-base-100 shadow-lg">
@@ -20,6 +28,12 @@
             <div class="text-center lg:text-left lg:ml-8">
                 <h1 class="text-5xl font-bold">Start Your Journey!</h1>
                 <p class="py-6">Join thousands of language learners and begin your path to fluency today. Create your account to access personalized lessons, track your progress, and connect with fellow learners.</p>
+                <div class="mt-4 p-4 bg-gradient-to-r from-blue-50 to-emerald-50 rounded-lg border-l-4" style="border-left-color: #0EA5E9;">
+                    <p class="text-sm font-medium" style="color: #0EA5E9;">
+                        <i class="fas fa-rocket mr-2"></i>Did You Know?
+                    </p>
+                    <p class="text-gray-700 mt-1" id="language-fact">Learning a new language increases brain plasticity and improves cognitive function.</p>
+                </div>
             </div>
             <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                 <div class="card-body">
@@ -42,15 +56,25 @@
                             <label class="label">
                                 <span class="label-text">Password</span>
                             </label>
-                            <input type="password" name="password" id="password" placeholder="••••••••" class="input input-bordered" required 
-                                   pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
-                                   title="Password must be at least 8 characters long and include both letters and numbers"/>
+                            <div class="relative">
+                                <input type="password" name="password" id="password" placeholder="••••••••" class="input input-bordered w-full pr-12" required
+                                       pattern="^(?=.*[A-Za-z])(?=.*\d).{8,}$"
+                                       title="Password must be at least 8 characters long and include both letters and numbers. Special characters are allowed."/>
+                                <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" onclick="togglePasswordVisibility('password', 'passwordIcon')">
+                                    <i class="fas fa-eye text-gray-400 hover:text-gray-600 cursor-pointer" id="passwordIcon"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text">Confirm Password</span>
                             </label>
-                            <input type="password" name="confirmPassword" id="confirmPassword" placeholder="••••••••" class="input input-bordered" required />
+                            <div class="relative">
+                                <input type="password" name="confirmPassword" id="confirmPassword" placeholder="••••••••" class="input input-bordered w-full pr-12" required />
+                                <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" onclick="togglePasswordVisibility('confirmPassword', 'confirmPasswordIcon')">
+                                    <i class="fas fa-eye text-gray-400 hover:text-gray-600 cursor-pointer" id="confirmPasswordIcon"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="form-control">
                             <label class="label cursor-pointer">
@@ -63,7 +87,7 @@
                             <span id="errorMessage">Error message here</span>
                         </div>
                         <div class="form-control mt-6">
-                            <button type="submit" class="btn btn-primary">Sign Up</button>
+                            <button type="submit" class="btn border-none text-white" style="background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);">Sign Up</button>
                         </div>
                     </form>
                     <div class="divider">OR</div>
@@ -89,6 +113,62 @@
     </div>
 
     <script>
+        // Language learning facts that cycle every 3 seconds
+        const languageFacts = [
+            "Learning a new language increases brain plasticity and improves cognitive function.",
+            "Bilingual people have better problem-solving skills and multitasking abilities.",
+            "Speaking multiple languages can delay the onset of dementia by up to 5 years.",
+            "There are over 7,000 languages spoken worldwide, but 40% are endangered.",
+            "Children who learn a second language show enhanced creativity and critical thinking.",
+            "Learning a language improves your native language skills and vocabulary.",
+            "Multilingual people earn 5-20% more than monolingual employees on average.",
+            "The best time to learn pronunciation is before age 18, but it's never too late!",
+            "Language learning strengthens memory and improves attention span.",
+            "People who speak multiple languages are better at making rational decisions."
+        ];
+
+        let currentFactIndex = 0;
+
+        function cycleFacts() {
+            const factElement = document.getElementById('language-fact');
+            if (factElement) {
+                factElement.style.opacity = '0';
+
+                setTimeout(() => {
+                    currentFactIndex = (currentFactIndex + 1) % languageFacts.length;
+                    factElement.textContent = languageFacts[currentFactIndex];
+                    factElement.style.opacity = '1';
+                }, 300);
+            }
+        }
+
+        // Initialize fact cycling
+        document.addEventListener('DOMContentLoaded', () => {
+            const factElement = document.getElementById('language-fact');
+            if (factElement) {
+                factElement.style.transition = 'opacity 0.3s ease-in-out';
+                setInterval(cycleFacts, 3000); // Change fact every 3 seconds
+            }
+        });
+
+        // Password visibility toggle function
+        function togglePasswordVisibility(inputId, iconId) {
+            const passwordInput = document.getElementById(inputId);
+            const eyeIcon = document.getElementById(iconId);
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+                eyeIcon.style.color = '#0EA5E9';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+                eyeIcon.style.color = '#9CA3AF';
+            }
+        }
+
         const form = document.getElementById('registerForm');
         const password = document.getElementById('password');
         const confirmPassword = document.getElementById('confirmPassword');
@@ -117,7 +197,7 @@
             const data = Object.fromEntries(formData);
 
             try {
-                const response = await fetch('auth/register', {
+                const response = await fetch('/api/auth/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -4,10 +4,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinguaLearn</title>
-    <link href="/css/output.css" rel="stylesheet">
+    <title>LinguaLearn - Master Languages Interactively</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Add animate.css for smooth animations -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary: #0EA5E9;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --neutral: #F8FAFC;
+            --dark: #0F172A;
+            --primary-dark: #0284C7;
+            --secondary-dark: #059669;
+            --accent-dark: #D97706;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--neutral) 0%, #E0F2FE 100%);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .floating { animation: float 6s ease-in-out infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(14, 165, 233, 0.15);
+        }
+
+        .glass-effect {
+            background: rgba(248, 250, 252, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #0369A1 100%);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            border: none;
+            color: white;
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            border: none;
+            color: white;
+        }
+
+        .progress-primary::-webkit-progress-value {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .badge-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .badge-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .badge-accent {
+            background: var(--accent);
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar with theme toggle -->
@@ -25,7 +116,9 @@
                     <li><a href="#pricing">Pricing</a></li>
                 </ul>
             </div>
-            <a class="btn btn-ghost normal-case text-xl">LinguaLearn</a>
+            <a class="btn btn-ghost normal-case text-xl">
+                <i class="fas fa-globe text-primary mr-2"></i>LinguaLearn
+            </a>
         </div>
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal px-1">
@@ -45,117 +138,562 @@
         </div>
     </div>
 
-    <!-- Hero Section with Typing Effect -->
-    <div class="hero min-h-[70vh] bg-base-200">
-        <div class="hero-content text-center">
-            <div class="max-w-md">
-                <h1 class="text-5xl font-bold mb-4">Master <span id="language-text" class="text-primary"></span></h1>
-                <p class="py-6">Learn languages effectively with our interactive platform. Practice vocabulary, grammar, and more with personalized lessons and track your progress.</p>
-                <div class="stats shadow my-4">
-                    <div class="stat">
-                        <div class="stat-title">Active Users</div>
-                        <div class="stat-value" id="user-count">0</div>
-                        <div class="stat-desc">↗︎ 400 (22%)</div>
+    <!-- Hero Section with Enhanced Design -->
+    <div class="hero min-h-screen bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 relative overflow-hidden" style="background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 50%, #0F172A 100%);">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0">
+            <div class="floating absolute top-20 left-10 w-20 h-20 rounded-full" style="background: rgba(14, 165, 233, 0.1);"></div>
+            <div class="floating absolute top-40 right-20 w-32 h-32 rounded-full" style="background: rgba(16, 185, 129, 0.1); animation-delay: -2s;"></div>
+            <div class="floating absolute bottom-20 left-1/4 w-16 h-16 rounded-full" style="background: rgba(245, 158, 11, 0.1); animation-delay: -4s;"></div>
+            <div class="floating absolute top-1/2 right-1/3 w-24 h-24 rounded-full" style="background: rgba(14, 165, 233, 0.05); animation-delay: -1s;"></div>
+        </div>
+
+        <div class="hero-content text-center text-white relative z-10">
+            <div class="max-w-5xl animate__animated animate__fadeInUp">
+                <h1 class="text-6xl md:text-7xl font-bold mb-6 leading-tight">
+                    Master
+                    <span class="block" style="color: #F59E0B;" id="language-text">Languages</span>
+                    <span class="block text-2xl md:text-3xl font-normal mt-4 opacity-90">Interactively</span>
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">
+                    Join millions of learners worldwide. Practice vocabulary, master grammar, and achieve fluency with our AI-powered learning platform.
+                </p>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                    <a href="/register" class="btn btn-accent btn-lg text-lg px-8 py-4 shadow-2xl transition-all duration-300 animate__animated animate__pulse animate__infinite" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border: none; color: white;">
+                        <i class="fas fa-rocket mr-2"></i>Start Learning Free
+                    </a>
+                    <a href="#demo" class="btn btn-outline btn-lg border-white hover:bg-white transition-all duration-300" style="color: white; border-color: white;" onmouseover="this.style.background='white'; this.style.color='#0EA5E9';" onmouseout="this.style.background='transparent'; this.style.color='white';">
+                        <i class="fas fa-play-circle mr-2"></i>Watch Demo
+                    </a>
+                </div>
+
+                <!-- Trust Indicators -->
+                <div class="flex flex-wrap justify-center items-center gap-6 text-sm opacity-75 mb-8">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle" style="color: #10B981;"></i> No Credit Card Required
                     </div>
-                    <div class="stat">
-                        <div class="stat-title">Languages</div>
-                        <div class="stat-value" id="language-count">0</div>
-                        <div class="stat-desc">Updated daily</div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle" style="color: #10B981;"></i> 50+ Languages
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle" style="color: #10B981;"></i> AI-Powered Learning
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle" style="color: #10B981;"></i> 2M+ Happy Learners
                     </div>
                 </div>
-                <a href="/register" class="btn btn-primary">Start Learning</a>
+
+                <!-- Live Stats -->
+                <div class="stats stats-vertical lg:stats-horizontal shadow-2xl glass-effect text-white">
+                    <div class="stat">
+                        <div class="stat-title text-white/80">Active Learners</div>
+                        <div class="stat-value" style="color: #F59E0B;" id="user-count">0</div>
+                        <div class="stat-desc text-white/60">↗︎ Growing daily</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-title text-white/80">Languages</div>
+                        <div class="stat-value" style="color: #0EA5E9;" id="language-count">0</div>
+                        <div class="stat-desc text-white/60">More coming soon</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-title text-white/80">Lessons Completed</div>
+                        <div class="stat-value" style="color: #10B981;" id="lessons-count">0</div>
+                        <div class="stat-desc text-white/60">This month</div>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
         </div>
     </div>
 
-    <!-- Interactive Features Section -->
-    <section id="features" class="py-16">
+    <!-- Enhanced Features Section -->
+    <section id="features" class="py-20 bg-white">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">Key Features</h2>
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold gradient-text mb-4">Powerful Learning Features</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Experience the future of language learning with our comprehensive suite of interactive tools and AI-powered features.
+                </p>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="card bg-base-100 shadow-xl hover:scale-105 transition-transform duration-300">
+                <!-- Interactive Quizzes -->
+                <div class="card bg-white shadow-xl card-hover" style="border: 1px solid rgba(14, 165, 233, 0.2);">
                     <div class="card-body items-center text-center">
-                        <div class="radial-progress text-primary" style="--value:0;" id="quiz-progress">0%</div>
-                        <h3 class="card-title mt-4">Interactive Quizzes</h3>
-                        <p>Test your knowledge with engaging quizzes</p>
+                        <div class="w-20 h-20 rounded-full flex items-center justify-center mb-4" style="background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);">
+                            <i class="fas fa-brain text-white text-3xl"></i>
+                        </div>
+                        <h3 class="card-title text-lg mb-2" style="color: #0F172A;">Interactive Quizzes</h3>
+                        <p class="text-gray-600 text-sm">Test your knowledge with adaptive quizzes that adjust to your skill level</p>
+                        <div class="mt-4">
+                            <div class="badge badge-primary">AI-Powered</div>
+                        </div>
                     </div>
                 </div>
-                <div class="card bg-base-100 shadow-xl hover:scale-105 transition-transform duration-300">
+
+                <!-- Smart Flashcards -->
+                <div class="card bg-white shadow-xl card-hover" style="border: 1px solid rgba(16, 185, 129, 0.2);">
                     <div class="card-body items-center text-center">
-                        <div class="radial-progress text-primary" style="--value:0;" id="quiz-progress">0%</div>
-                        <h3 class="card-title mt-4">Flash cards</h3>
-                        <p>Master vocabulary efficiently with our smart flashcard system</p>
+                        <div class="w-20 h-20 rounded-full flex items-center justify-center mb-4" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                            <i class="fas fa-layer-group text-white text-3xl"></i>
+                        </div>
+                        <h3 class="card-title text-lg mb-2" style="color: #0F172A;">Smart Flashcards</h3>
+                        <p class="text-gray-600 text-sm">Master vocabulary with spaced repetition and intelligent review scheduling</p>
+                        <div class="mt-4">
+                            <div class="badge badge-secondary">Spaced Repetition</div>
+                        </div>
                     </div>
                 </div>
-                <div class="card bg-base-100 shadow-xl hover:scale-105 transition-transform duration-300">
+
+                <!-- Grammar Practice -->
+                <div class="card bg-white shadow-xl card-hover" style="border: 1px solid rgba(245, 158, 11, 0.2);">
                     <div class="card-body items-center text-center">
-                        <div class="radial-progress text-primary" style="--value:0;" id="quiz-progress">0%</div>
-                        <h3 class="card-title mt-4">Grammar Practice</h3>
-                        <p>Perfect your grammar with targeted exercises and explanations</p>
+                        <div class="w-20 h-20 rounded-full flex items-center justify-center mb-4" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);">
+                            <i class="fas fa-spell-check text-white text-3xl"></i>
+                        </div>
+                        <h3 class="card-title text-lg mb-2" style="color: #0F172A;">Grammar Practice</h3>
+                        <p class="text-gray-600 text-sm">Perfect your grammar with targeted exercises and detailed explanations</p>
+                        <div class="mt-4">
+                            <div class="badge badge-accent">Interactive</div>
+                        </div>
                     </div>
                 </div>
-                <div class="card bg-base-100 shadow-xl hover:scale-105 transition-transform duration-300">
+
+                <!-- Progress Tracking -->
+                <div class="card bg-white shadow-xl card-hover" style="border: 1px solid rgba(14, 165, 233, 0.2);">
                     <div class="card-body items-center text-center">
-                        <div class="radial-progress text-primary" style="--value:0;" id="quiz-progress">0%</div>
-                        <h3 class="card-title mt-4">Progress tracking</h3>
-                        <p>Monitor your learning journey with detailed progress analytics</p>
+                        <div class="w-20 h-20 rounded-full flex items-center justify-center mb-4" style="background: linear-gradient(135deg, #0EA5E9 0%, #10B981 100%);">
+                            <i class="fas fa-chart-line text-white text-3xl"></i>
+                        </div>
+                        <h3 class="card-title text-lg mb-2" style="color: #0F172A;">Progress Tracking</h3>
+                        <p class="text-gray-600 text-sm">Monitor your learning journey with detailed analytics and insights</p>
+                        <div class="mt-4">
+                            <div class="badge" style="background: linear-gradient(135deg, #0EA5E9 0%, #10B981 100%); color: white;">Analytics</div>
+                        </div>
                     </div>
                 </div>
-                <!-- Similar cards for other features... -->
+            </div>
+
+            <!-- Additional Features Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                <!-- Vocabulary Builder -->
+                <div class="card text-white shadow-xl card-hover" style="background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);">
+                    <div class="card-body text-center">
+                        <i class="fas fa-book text-4xl mb-4"></i>
+                        <h3 class="card-title justify-center text-white mb-2">Vocabulary Builder</h3>
+                        <p class="text-white/90">Expand your vocabulary with contextual learning and real-world examples</p>
+                    </div>
+                </div>
+
+                <!-- Pronunciation Practice -->
+                <div class="card text-white shadow-xl card-hover" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                    <div class="card-body text-center">
+                        <i class="fas fa-microphone text-4xl mb-4"></i>
+                        <h3 class="card-title justify-center text-white mb-2">Pronunciation Practice</h3>
+                        <p class="text-white/90">Perfect your accent with AI-powered speech recognition and feedback</p>
+                    </div>
+                </div>
+
+                <!-- Cultural Context -->
+                <div class="card text-white shadow-xl card-hover" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);">
+                    <div class="card-body text-center">
+                        <i class="fas fa-globe-americas text-4xl mb-4"></i>
+                        <h3 class="card-title justify-center text-white mb-2">Cultural Context</h3>
+                        <p class="text-white/90">Learn languages in context with cultural insights and real-world scenarios</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Demo Quiz Section -->
-    <section class="py-16 bg-base-200">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">Try a Demo Quiz</h2>
-            <div class="card max-w-lg mx-auto bg-base-100 shadow-xl">
-                <div class="card-body">
-                    <div id="demo-quiz">
-                        <h3 class="card-title mb-4">Quick Vocabulary Test</h3>
-                        <div class="quiz-question mb-4">
-                            <p class="font-semibold mb-2" id="question-text">Loading question...</p>
-                            <div class="grid gap-2" id="options-container">
-                                <!-- Options will be inserted here -->
+    <!-- Interactive Demo Quiz Section -->
+    <section class="py-20 relative overflow-hidden" style="background: linear-gradient(135deg, #F8FAFC 0%, #E0F2FE 100%);">
+        <!-- Background Elements -->
+        <div class="absolute inset-0">
+            <div class="floating absolute top-10 left-20 w-16 h-16 rounded-full" style="background: rgba(14, 165, 233, 0.1); animation-delay: -1s;"></div>
+            <div class="floating absolute bottom-20 right-10 w-24 h-24 rounded-full" style="background: rgba(16, 185, 129, 0.1); animation-delay: -3s;"></div>
+            <div class="floating absolute top-1/2 left-10 w-12 h-12 rounded-full" style="background: rgba(245, 158, 11, 0.1); animation-delay: -2s;"></div>
+        </div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold gradient-text mb-4">Try Our Interactive Quiz</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Experience our adaptive learning system with this quick demo. See how our AI adjusts to your learning pace!
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="card bg-white/80 backdrop-blur-md shadow-2xl border border-white/20 animate__animated animate__fadeInUp">
+                    <div class="card-body p-8">
+                        <!-- Quiz Header -->
+                        <div class="flex justify-between items-center mb-8">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-800">Quick Language Assessment</h3>
+                                <p class="text-gray-600">Test your vocabulary knowledge</p>
                             </div>
+                            <div class="text-right">
+                                <div class="text-sm text-gray-500">Question <span id="demo-current">1</span> of <span id="demo-total">5</span></div>
+                                <div class="mt-2">
+                                    <progress class="progress progress-primary w-32" value="20" max="100" id="demo-progress"></progress>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quiz Content -->
+                        <div id="demo-quiz" class="min-h-[300px]">
+                            <div class="mb-6">
+                                <div class="flex gap-2 mb-4">
+                                    <div class="badge badge-primary">Vocabulary</div>
+                                    <div class="badge" style="background: transparent; border: 1px solid #0EA5E9; color: #0EA5E9;">Beginner</div>
+                                    <div class="badge badge-accent">+10 pts</div>
+                                </div>
+                                <h4 class="text-xl font-semibold mb-4" style="color: #0F172A;" id="demo-question">What does "Hola" mean in English?</h4>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="demo-options">
+                                <!-- Options will be populated here -->
+                            </div>
+
+                            <!-- Quiz Actions -->
+                            <div class="flex justify-between items-center mt-8">
+                                <button class="btn" style="background: transparent; border: 1px solid #0EA5E9; color: #0EA5E9;" onclick="skipDemoQuestion()" id="demo-skip">
+                                    Skip Question
+                                </button>
+                                <div class="flex gap-3">
+                                    <button class="btn btn-ghost" style="color: #0F172A;" onclick="showDemoHint()" id="demo-hint">
+                                        💡 Hint
+                                    </button>
+                                    <button class="btn btn-primary" onclick="submitDemoAnswer()" id="demo-submit" disabled>
+                                        Submit Answer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quiz Results (Hidden initially) -->
+                        <div id="demo-results" class="text-center" style="display: none;">
+                            <div class="text-6xl mb-4" id="demo-emoji">🎉</div>
+                            <h3 class="text-3xl font-bold mb-4" id="demo-score-text">Great job!</h3>
+                            <p class="text-lg text-gray-600 mb-6">You scored <span id="demo-final-score" class="font-bold text-primary">4/5</span></p>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                <a href="/register" class="btn btn-primary btn-lg">
+                                    🚀 Start Full Learning Journey
+                                </a>
+                                <button class="btn btn-outline btn-lg" onclick="restartDemo()">
+                                    🔄 Try Again
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo Features -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+                    <div class="card bg-white/80 backdrop-blur-sm shadow-lg card-hover" style="border: 1px solid rgba(14, 165, 233, 0.2);">
+                        <div class="card-body text-center">
+                            <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style="background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);">
+                                <i class="fas fa-bolt text-white text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2" style="color: #0F172A;">Adaptive Learning</h4>
+                            <p class="text-gray-600 text-sm">Questions adjust to your skill level in real-time</p>
+                        </div>
+                    </div>
+
+                    <div class="card bg-white/80 backdrop-blur-sm shadow-lg card-hover" style="border: 1px solid rgba(16, 185, 129, 0.2);">
+                        <div class="card-body text-center">
+                            <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                                <i class="fas fa-check-circle text-white text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2" style="color: #0F172A;">Instant Feedback</h4>
+                            <p class="text-gray-600 text-sm">Get immediate explanations and corrections</p>
+                        </div>
+                    </div>
+
+                    <div class="card bg-white/80 backdrop-blur-sm shadow-lg card-hover" style="border: 1px solid rgba(245, 158, 11, 0.2);">
+                        <div class="card-body text-center">
+                            <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);">
+                                <i class="fas fa-chart-bar text-white text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2" style="color: #0F172A;">Progress Tracking</h4>
+                            <p class="text-gray-600 text-sm">Monitor your improvement with detailed analytics</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section> 
+    </section>
 
-    <section id="how-it-works" class="py-16 bg-base-200">
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 bg-white relative">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">How It Works</h2>
-            <div class="steps steps-vertical lg:steps-horizontal">
-                <div class="step step-primary">Create Account</div>
-                <div class="step step-primary">Choose Your Level</div>
-                <div class="step step-primary">Practice Daily</div>
-                <div class="step step-primary">Track Progress</div>
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold gradient-text mb-4">How LinguaLearn Works</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Start your language learning journey in just 4 simple steps. Our proven methodology gets you speaking confidently in weeks, not years.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 relative">
+                <!-- Connection Lines (Desktop) -->
+                <div class="hidden lg:block absolute top-24 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-200 via-blue-200 to-green-200 z-0"></div>
+
+                <!-- Step 1 -->
+                <div class="relative z-10 animate__animated animate__fadeInUp">
+                    <div class="card text-white shadow-xl card-hover" style="background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);">
+                        <div class="card-body text-center p-8">
+                            <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6 relative">
+                                <span class="text-3xl font-bold">1</span>
+                                <div class="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center" style="background: #F59E0B;">
+                                    <span class="text-xs">✨</span>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Create Your Account</h3>
+                            <p class="text-white/90 text-sm mb-4">Sign up for free and tell us about your language goals and current level</p>
+                            <div class="badge" style="background: transparent; border: 1px solid #F59E0B; color: #F59E0B;">2 minutes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative z-10 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                    <div class="card text-white shadow-xl card-hover" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                        <div class="card-body text-center p-8">
+                            <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6 relative">
+                                <span class="text-3xl font-bold">2</span>
+                                <div class="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center" style="background: #0EA5E9;">
+                                    <span class="text-xs">🎯</span>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Take Assessment</h3>
+                            <p class="text-white/90 text-sm mb-4">Our AI evaluates your current level and creates a personalized learning path</p>
+                            <div class="badge" style="background: transparent; border: 1px solid #0EA5E9; color: #0EA5E9;">5 minutes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative z-10 animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+                    <div class="card text-white shadow-xl card-hover" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);">
+                        <div class="card-body text-center p-8">
+                            <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6 relative">
+                                <span class="text-3xl font-bold">3</span>
+                                <div class="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center" style="background: #10B981;">
+                                    <span class="text-xs">📚</span>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Start Learning</h3>
+                            <p class="text-white/90 text-sm mb-4">Practice with interactive lessons, quizzes, and flashcards tailored to your pace</p>
+                            <div class="badge" style="background: transparent; border: 1px solid #10B981; color: #10B981;">15 min/day</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative z-10 animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
+                    <div class="card text-white shadow-xl card-hover" style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);">
+                        <div class="card-body text-center p-8">
+                            <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6 relative">
+                                <span class="text-3xl font-bold">4</span>
+                                <div class="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center" style="background: #F59E0B;">
+                                    <span class="text-xs">🏆</span>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Track Progress</h3>
+                            <p class="text-white/90 text-sm mb-4">Monitor your improvement with detailed analytics and celebrate achievements</p>
+                            <div class="badge" style="background: transparent; border: 1px solid #F59E0B; color: #F59E0B;">Ongoing</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Stats -->
+            <div class="mt-16 text-center">
+                <div class="stats stats-vertical lg:stats-horizontal shadow-2xl" style="background: linear-gradient(135deg, #F8FAFC 0%, #E0F2FE 100%);">
+                    <div class="stat">
+                        <div class="stat-figure" style="color: #0EA5E9;">
+                            <i class="fas fa-clock text-2xl"></i>
+                        </div>
+                        <div class="stat-title" style="color: #0F172A;">Average Time to Fluency</div>
+                        <div class="stat-value" style="color: #0EA5E9;">3 months</div>
+                        <div class="stat-desc">With consistent daily practice</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-figure" style="color: #10B981;">
+                            <i class="fas fa-trophy text-2xl"></i>
+                        </div>
+                        <div class="stat-title" style="color: #0F172A;">Success Rate</div>
+                        <div class="stat-value" style="color: #10B981;">95%</div>
+                        <div class="stat-desc">Users reach their goals</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-figure" style="color: #F59E0B;">
+                            <i class="fas fa-heart text-2xl"></i>
+                        </div>
+                        <div class="stat-title" style="color: #0F172A;">User Satisfaction</div>
+                        <div class="stat-value" style="color: #F59E0B;">4.9/5</div>
+                        <div class="stat-desc">Based on 50k+ reviews</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
     
     
 
-    <footer class="footer footer-center p-10 bg-base-200 text-base-content rounded">
-        <div class="grid grid-flow-col gap-4">
-            <a class="link link-hover">About us</a>
-            <a class="link link-hover">Contact</a>
-            <a class="link link-hover">Privacy Policy</a>
-            <a class="link link-hover">Terms of use</a>
+    <!-- Modern Footer -->
+    <footer class="text-white relative overflow-hidden" style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0EA5E9 100%);">
+        <!-- Background Elements -->
+        <div class="absolute inset-0">
+            <div class="floating absolute top-10 left-20 w-20 h-20 rounded-full" style="background: rgba(14, 165, 233, 0.1); animation-delay: -2s;"></div>
+            <div class="floating absolute bottom-20 right-10 w-32 h-32 rounded-full" style="background: rgba(16, 185, 129, 0.1); animation-delay: -4s;"></div>
+            <div class="floating absolute top-1/2 left-1/3 w-16 h-16 rounded-full" style="background: rgba(245, 158, 11, 0.1); animation-delay: -1s;"></div>
         </div>
-        <div>
-            <div class="grid grid-flow-col gap-4">
-                <a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg></a>
-                <a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg></a>
-                <a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path></svg></a>
+
+        <div class="container mx-auto px-4 py-16 relative z-10">
+            <!-- Main Footer Content -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <!-- Brand Section -->
+                <div class="lg:col-span-1">
+                    <div class="flex items-center mb-6">
+                        <span class="text-3xl font-bold gradient-text">🌍 LinguaLearn</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Empowering millions of learners worldwide to master new languages through innovative AI-powered learning experiences.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all duration-300 group">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all duration-300 group">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all duration-300 group">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all duration-300 group">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.746-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24c6.624 0 11.99-5.367 11.99-11.987C24.007 5.367 18.641.001 12.017.001z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-6 text-white">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#features" class="text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
+                            <span class="w-1 h-1 rounded-full mr-3 group-hover:w-2 transition-all duration-300" style="background: #0EA5E9;"></span>
+                            Features
+                        </a></li>
+                        <li><a href="#how-it-works" class="text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
+                            <span class="w-1 h-1 rounded-full mr-3 group-hover:w-2 transition-all duration-300" style="background: #0EA5E9;"></span>
+                            How It Works
+                        </a></li>
+                        <li><a href="/pricing" class="text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
+                            <span class="w-1 h-1 rounded-full mr-3 group-hover:w-2 transition-all duration-300" style="background: #0EA5E9;"></span>
+                            Pricing
+                        </a></li>
+                        <li><a href="/about" class="text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
+                            <span class="w-1 h-1 rounded-full mr-3 group-hover:w-2 transition-all duration-300" style="background: #0EA5E9;"></span>
+                            About Us
+                        </a></li>
+                    </ul>
+                </div>
+
+                <!-- Learning Resources -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-6 text-white">Learning</h3>
+                    <ul class="space-y-3">
+                        <li><a href="/vocabulary" class="text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
+                            <span class="w-1 h-1 rounded-full mr-3 group-hover:w-2 transition-all duration-300" style="background: #10B981;"></span>
+                            Vocabulary
+                        </a></li>
+                        <li><a href="/grammar" class="text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
+                            <span class="w-1 h-1 rounded-full mr-3 group-hover:w-2 transition-all duration-300" style="background: #10B981;"></span>
+                            Grammar
+                        </a></li>
+                        <li><a href="/flashcards" class="text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
+                            <span class="w-1 h-1 rounded-full mr-3 group-hover:w-2 transition-all duration-300" style="background: #10B981;"></span>
+                            Flashcards
+                        </a></li>
+                        <li><a href="/quiz" class="text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
+                            <span class="w-1 h-1 rounded-full mr-3 group-hover:w-2 transition-all duration-300" style="background: #10B981;"></span>
+                            Quizzes
+                        </a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-6 text-white">Support</h3>
+                    <ul class="space-y-3">
+                        <li><a href="/help" class="text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
+                            <span class="w-1 h-1 rounded-full mr-3 group-hover:w-2 transition-all duration-300" style="background: #F59E0B;"></span>
+                            Help Center
+                        </a></li>
+                        <li><a href="/contact" class="text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
+                            <span class="w-1 h-1 rounded-full mr-3 group-hover:w-2 transition-all duration-300" style="background: #F59E0B;"></span>
+                            Contact Us
+                        </a></li>
+                        <li><a href="/privacy" class="text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
+                            <span class="w-1 h-1 rounded-full mr-3 group-hover:w-2 transition-all duration-300" style="background: #F59E0B;"></span>
+                            Privacy Policy
+                        </a></li>
+                        <li><a href="/terms" class="text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
+                            <span class="w-1 h-1 rounded-full mr-3 group-hover:w-2 transition-all duration-300" style="background: #F59E0B;"></span>
+                            Terms of Service
+                        </a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div>
-            <p>Copyright © 2024 - All rights reserved by LinguaLearn</p>
+
+            <!-- Newsletter Signup -->
+            <div class="border-t border-white/10 pt-8 mb-8">
+                <div class="max-w-2xl mx-auto text-center">
+                    <h3 class="text-2xl font-bold mb-4">Stay Updated</h3>
+                    <p class="text-gray-300 mb-6">Get the latest language learning tips, updates, and exclusive content delivered to your inbox.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                        <input type="email" placeholder="Enter your email" class="input input-bordered flex-1 bg-white/10 border-white/20 text-white placeholder-gray-400">
+                        <button class="btn border-none" style="background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%); color: white;">
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <div class="text-gray-300 text-sm mb-4 md:mb-0">
+                    <p>&copy; 2024 LinguaLearn. All rights reserved. Made with ❤️ for language learners worldwide.</p>
+                </div>
+                <div class="flex items-center space-x-6 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 rounded-full animate-pulse" style="background: #10B981;"></div>
+                        <span class="text-gray-300">All systems operational</span>
+                    </div>
+                    <div class="text-gray-400">
+                        <span id="current-users">2,547</span> learners online
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
     <script>
@@ -209,76 +747,306 @@
             updateCounter();
         }
 
-        // Demo quiz functionality
+        // Enhanced Demo quiz functionality
         const demoQuestions = [
             {
-                question: "What is 'hello' in Spanish?",
-                options: ['Hola', 'Bonjour', 'Ciao', 'Hallo'],
-                correct: 0
+                question: "What does 'Hola' mean in English?",
+                options: ['Hello', 'Goodbye', 'Thank you', 'Please'],
+                correct: 0,
+                explanation: "'Hola' is the most common way to say 'hello' in Spanish."
             },
             {
-                question: "What is 'hello' in French",
-                options: ['Ciao', 'Hallo', 'Hola', 'Bonjour'],
-                correct: 0
+                question: "Which word means 'thank you' in French?",
+                options: ['Bonjour', 'Au revoir', 'Merci', 'S\'il vous plaît'],
+                correct: 2,
+                explanation: "'Merci' is how you say 'thank you' in French."
             },
-            // Add more questions...
+            {
+                question: "What is the German word for 'good morning'?",
+                options: ['Guten Tag', 'Guten Morgen', 'Gute Nacht', 'Auf Wiedersehen'],
+                correct: 1,
+                explanation: "'Guten Morgen' means 'good morning' in German."
+            },
+            {
+                question: "How do you say 'goodbye' in Italian?",
+                options: ['Ciao', 'Grazie', 'Prego', 'Buongiorno'],
+                correct: 0,
+                explanation: "'Ciao' can mean both 'hello' and 'goodbye' in Italian."
+            },
+            {
+                question: "What does 'Arigato' mean in Japanese?",
+                options: ['Hello', 'Goodbye', 'Thank you', 'Excuse me'],
+                correct: 2,
+                explanation: "'Arigato' (ありがとう) means 'thank you' in Japanese."
+            }
         ];
 
-        let currentQuestion = 0;
+        let currentDemoQuestion = 0;
+        let demoScore = 0;
+        let selectedAnswer = null;
 
-        function loadQuestion() {
-            const question = demoQuestions[currentQuestion];
-            document.getElementById('question-text').textContent = question.question;
-            
-            const optionsContainer = document.getElementById('options-container');
+        function loadDemoQuestion() {
+            if (currentDemoQuestion >= demoQuestions.length) {
+                showDemoResults();
+                return;
+            }
+
+            const question = demoQuestions[currentDemoQuestion];
+            document.getElementById('demo-question').textContent = question.question;
+            document.getElementById('demo-current').textContent = currentDemoQuestion + 1;
+            document.getElementById('demo-total').textContent = demoQuestions.length;
+
+            // Update progress
+            const progress = ((currentDemoQuestion) / demoQuestions.length) * 100;
+            document.getElementById('demo-progress').value = progress;
+
+            const optionsContainer = document.getElementById('demo-options');
             optionsContainer.innerHTML = '';
-            
+
             question.options.forEach((option, index) => {
                 const button = document.createElement('button');
-                button.className = 'btn btn-outline w-full';
-                button.textContent = option;
-                button.onclick = () => checkAnswer(index);
+                button.className = 'btn btn-outline btn-lg w-full text-left justify-start hover:btn-primary transition-all duration-300';
+                button.innerHTML = `
+                    <span class="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-4 text-sm font-bold">
+                        ${String.fromCharCode(65 + index)}
+                    </span>
+                    ${option}
+                `;
+                button.onclick = () => selectDemoAnswer(index, button);
                 optionsContainer.appendChild(button);
             });
+
+            // Reset submit button
+            document.getElementById('demo-submit').disabled = true;
+            selectedAnswer = null;
         }
 
-        function checkAnswer(selectedIndex) {
-            const question = demoQuestions[currentQuestion];
-            const buttons = document.querySelectorAll('#options-container button');
-            
+        function selectDemoAnswer(index, button) {
+            // Remove previous selection
+            document.querySelectorAll('#demo-options button').forEach(btn => {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline');
+            });
+
+            // Highlight selected
+            button.classList.remove('btn-outline');
+            button.classList.add('btn-primary');
+
+            selectedAnswer = index;
+            document.getElementById('demo-submit').disabled = false;
+        }
+
+        function submitDemoAnswer() {
+            if (selectedAnswer === null) return;
+
+            const question = demoQuestions[currentDemoQuestion];
+            const buttons = document.querySelectorAll('#demo-options button');
+            const isCorrect = selectedAnswer === question.correct;
+
+            if (isCorrect) demoScore++;
+
             buttons.forEach((button, index) => {
                 button.disabled = true;
+                button.classList.remove('btn-primary', 'btn-outline');
+
                 if (index === question.correct) {
                     button.classList.add('btn-success');
-                } else if (index === selectedIndex && selectedIndex !== question.correct) {
+                } else if (index === selectedAnswer && !isCorrect) {
                     button.classList.add('btn-error');
+                } else {
+                    button.classList.add('btn-ghost');
                 }
             });
 
+            // Show explanation
+            const explanationDiv = document.createElement('div');
+            explanationDiv.className = 'alert mt-4 animate__animated animate__fadeInUp';
+            explanationDiv.classList.add(isCorrect ? 'alert-success' : 'alert-info');
+            explanationDiv.innerHTML = `
+                <div class="flex items-start">
+                    <span class="text-2xl mr-3">${isCorrect ? '✅' : '💡'}</span>
+                    <div>
+                        <h4 class="font-bold">${isCorrect ? 'Correct!' : 'Good try!'}</h4>
+                        <p class="text-sm">${question.explanation}</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('demo-quiz').appendChild(explanationDiv);
+
+            // Disable buttons
+            document.getElementById('demo-submit').disabled = true;
+            document.getElementById('demo-skip').disabled = true;
+
             setTimeout(() => {
-                currentQuestion = (currentQuestion + 1) % demoQuestions.length;
-                loadQuestion();
-            }, 1500);
+                explanationDiv.remove();
+                currentDemoQuestion++;
+                document.getElementById('demo-skip').disabled = false;
+                loadDemoQuestion();
+            }, 3000);
+        }
+
+        function skipDemoQuestion() {
+            currentDemoQuestion++;
+            loadDemoQuestion();
+        }
+
+        function showDemoHint() {
+            const question = demoQuestions[currentDemoQuestion];
+            const hints = [
+                "Think about common greetings you might know.",
+                "Consider the language family and similar words.",
+                "This is a basic courtesy word used daily.",
+                "Remember common phrases from movies or songs.",
+                "Think about the cultural context of the language."
+            ];
+
+            alert(`💡 Hint: ${hints[currentDemoQuestion] || hints[0]}`);
+        }
+
+        function showDemoResults() {
+            document.getElementById('demo-quiz').style.display = 'none';
+            document.getElementById('demo-results').style.display = 'block';
+
+            const percentage = Math.round((demoScore / demoQuestions.length) * 100);
+            document.getElementById('demo-final-score').textContent = `${demoScore}/${demoQuestions.length}`;
+
+            // Update emoji and message based on score
+            const emoji = percentage >= 80 ? '🎉' : percentage >= 60 ? '😊' : percentage >= 40 ? '🙂' : '💪';
+            const message = percentage >= 80 ? 'Excellent work!' :
+                           percentage >= 60 ? 'Great job!' :
+                           percentage >= 40 ? 'Good effort!' : 'Keep practicing!';
+
+            document.getElementById('demo-emoji').textContent = emoji;
+            document.getElementById('demo-score-text').textContent = message;
+        }
+
+        function restartDemo() {
+            currentDemoQuestion = 0;
+            demoScore = 0;
+            selectedAnswer = null;
+            document.getElementById('demo-quiz').style.display = 'block';
+            document.getElementById('demo-results').style.display = 'none';
+            loadDemoQuestion();
         }
 
         // Initialize everything when the page loads
         document.addEventListener('DOMContentLoaded', () => {
             cycleLanguages();
-            animateCounter(document.getElementById('user-count'), +100);
-            animateCounter(document.getElementById('language-count'), 6);
-            loadQuestion();
+            animateCounter(document.getElementById('user-count'), 2500000);
+            animateCounter(document.getElementById('language-count'), 50);
+            animateCounter(document.getElementById('lessons-count'), 100000000);
+            loadDemoQuestion();
 
-            // Intersection Observer for animations
+            // Enhanced Intersection Observer for animations
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                        if (entry.target.classList.contains('card')) {
+                            entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                        } else if (entry.target.classList.contains('stats')) {
+                            entry.target.classList.add('animate__animated', 'animate__zoomIn');
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            // Observe elements for animations
+            document.querySelectorAll('.card, .stats').forEach(element => {
+                observer.observe(element);
+            });
+
+            // Add smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
                     }
                 });
             });
 
-            document.querySelectorAll('.card').forEach(card => {
-                observer.observe(card);
+            // Add parallax effect to floating elements
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const parallax = document.querySelectorAll('.floating');
+                const speed = 0.5;
+
+                parallax.forEach(element => {
+                    const yPos = -(scrolled * speed);
+                    element.style.transform = `translateY(${yPos}px)`;
+                });
+            });
+
+            // Add hover effects to feature cards
+            document.querySelectorAll('.card-hover').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Animate online users counter in footer
+            setInterval(() => {
+                const currentUsersElement = document.getElementById('current-users');
+                if (currentUsersElement) {
+                    const currentCount = parseInt(currentUsersElement.textContent.replace(',', ''));
+                    const variation = Math.floor(Math.random() * 20) - 10; // ±10 users
+                    const newCount = Math.max(2500, currentCount + variation);
+                    currentUsersElement.textContent = newCount.toLocaleString();
+                }
+            }, 5000);
+
+            // Add newsletter subscription functionality
+            const newsletterForm = document.querySelector('footer input[type="email"]').parentElement;
+            const emailInput = newsletterForm.querySelector('input[type="email"]');
+            const subscribeBtn = newsletterForm.querySelector('button');
+
+            subscribeBtn.addEventListener('click', () => {
+                const email = emailInput.value.trim();
+                if (email && email.includes('@')) {
+                    subscribeBtn.innerHTML = '<span class="loading loading-spinner loading-sm"></span> Subscribing...';
+                    subscribeBtn.disabled = true;
+
+                    setTimeout(() => {
+                        subscribeBtn.innerHTML = '✅ Subscribed!';
+                        subscribeBtn.classList.remove('btn-primary');
+                        subscribeBtn.classList.add('btn-success');
+                        emailInput.value = '';
+
+                        setTimeout(() => {
+                            subscribeBtn.innerHTML = 'Subscribe';
+                            subscribeBtn.classList.remove('btn-success');
+                            subscribeBtn.classList.add('btn-primary');
+                            subscribeBtn.disabled = false;
+                        }, 3000);
+                    }, 2000);
+                } else {
+                    emailInput.classList.add('input-error');
+                    setTimeout(() => emailInput.classList.remove('input-error'), 3000);
+                }
+            });
+
+            // Add typing indicator to hero section
+            const heroSection = document.querySelector('.hero');
+            let typingTimeout;
+
+            window.addEventListener('scroll', () => {
+                clearTimeout(typingTimeout);
+                typingTimeout = setTimeout(() => {
+                    // Add subtle scroll-based animations
+                    const scrollPercent = window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight);
+                    document.body.style.setProperty('--scroll-percent', scrollPercent);
+                }, 10);
             });
         });
     </script>

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punctuation Practice - LinguaLearn</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body class="bg-base-100">
+    <!-- Navigation -->
+    <div class="navbar bg-secondary text-secondary-content">
+        <div class="navbar-start">
+            <a href="/" class="btn btn-ghost text-xl">LinguaLearn</a>
+        </div>
+        <div class="navbar-center">
+            <h1 class="text-lg font-semibold">Punctuation Practice</h1>
+        </div>
+        <div class="navbar-end">
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                    <div class="w-10 rounded-full">
+                        <img alt="User avatar" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                    </div>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 text-base-content rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a onclick="logout()">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Mode Selection -->
+        <div class="tabs tabs-boxed mb-8 justify-center">
+            <a class="tab tab-active" onclick="switchMode('practice')" id="practice-tab">Practice Exercises</a>
+            <a class="tab" onclick="switchMode('correction')" id="correction-tab">Text Correction</a>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mb-8" id="progress-section">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium">Progress</span>
+                <span class="text-sm text-gray-500" id="progress-text">0/10</span>
+            </div>
+            <progress class="progress progress-secondary w-full" value="0" max="100" id="progress-bar"></progress>
+        </div>
+
+        <!-- Practice Mode -->
+        <div id="practice-mode">
+            <!-- Exercise Card -->
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="card-title">Punctuation Exercise</h2>
+                        <div class="badge badge-secondary" id="difficulty-badge">Beginner</div>
+                    </div>
+                    
+                    <div id="exercise-content">
+                        <div class="text-center py-8">
+                            <span class="loading loading-spinner loading-lg text-secondary"></span>
+                            <p class="mt-4">Loading exercise...</p>
+                        </div>
+                    </div>
+
+                    <div class="card-actions justify-between mt-6" id="exercise-actions" style="display: none;">
+                        <button class="btn btn-outline" onclick="showHint()">💡 Hint</button>
+                        <button class="btn btn-secondary" onclick="submitAnswer()" id="submit-btn">Submit Answer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Text Correction Mode -->
+        <div id="correction-mode" style="display: none;">
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Text Correction Exercise</h2>
+                    <p class="mb-4 text-gray-600">Correct the punctuation errors in the text below:</p>
+                    
+                    <div id="correction-content">
+                        <div class="text-center py-8">
+                            <span class="loading loading-spinner loading-lg text-secondary"></span>
+                            <p class="mt-4">Loading text...</p>
+                        </div>
+                    </div>
+
+                    <div class="card-actions justify-end mt-6" id="correction-actions" style="display: none;">
+                        <button class="btn btn-outline" onclick="resetText()">Reset</button>
+                        <button class="btn btn-secondary" onclick="submitCorrection()">Submit Correction</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Modal -->
+        <dialog id="result-modal" class="modal">
+            <div class="modal-box">
+                <h3 class="font-bold text-lg" id="result-title">Result</h3>
+                <div class="py-4" id="result-content"></div>
+                <div class="modal-action">
+                    <button class="btn btn-secondary" onclick="nextExercise()">Next Exercise</button>
+                </div>
+            </div>
+        </dialog>
+
+        <!-- Punctuation Reference -->
+        <div class="fixed bottom-4 left-4">
+            <div class="dropdown dropdown-top">
+                <div tabindex="0" role="button" class="btn btn-circle btn-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div tabindex="0" class="dropdown-content z-[1] card card-compact w-80 p-2 shadow bg-base-100 text-base-content">
+                    <div class="card-body">
+                        <h3 class="card-title">Quick Reference</h3>
+                        <div class="text-sm space-y-2">
+                            <div><strong>Period (.)</strong> - End of sentence</div>
+                            <div><strong>Comma (,)</strong> - Pause, separate items</div>
+                            <div><strong>Question Mark (?)</strong> - Questions</div>
+                            <div><strong>Exclamation (!)</strong> - Strong emotion</div>
+                            <div><strong>Semicolon (;)</strong> - Connect related clauses</div>
+                            <div><strong>Colon (:)</strong> - Introduce lists/explanations</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Panel -->
+        <div class="fixed bottom-4 right-4">
+            <div class="dropdown dropdown-top dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-circle btn-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <div tabindex="0" class="dropdown-content z-[1] card card-compact w-64 p-2 shadow bg-base-100 text-base-content">
+                    <div class="card-body">
+                        <h3 class="card-title">Settings</h3>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Language</span>
+                            </label>
+                            <select class="select select-bordered select-sm" id="language-select">
+                                <option value="english">English</option>
+                                <option value="spanish">Spanish</option>
+                                <option value="french">French</option>
+                            </select>
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Difficulty</span>
+                            </label>
+                            <select class="select select-bordered select-sm" id="difficulty-select">
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                            </select>
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Focus</span>
+                            </label>
+                            <select class="select select-bordered select-sm" id="punctuation-select">
+                                <option value="">All Punctuation</option>
+                                <option value="comma">Comma</option>
+                                <option value="period">Period</option>
+                                <option value="question-mark">Question Mark</option>
+                                <option value="semicolon">Semicolon</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'practice';
+        let currentExercise = null;
+        let currentExerciseIndex = 0;
+        let totalExercises = 10;
+        let exercises = [];
+        let startTime = null;
+        let originalText = '';
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadContent();
+        });
+
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            // Update tab appearance
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('tab-active'));
+            document.getElementById(`${mode}-tab`).classList.add('tab-active');
+            
+            // Show/hide mode sections
+            document.getElementById('practice-mode').style.display = mode === 'practice' ? 'block' : 'none';
+            document.getElementById('correction-mode').style.display = mode === 'correction' ? 'block' : 'none';
+            document.getElementById('progress-section').style.display = mode === 'practice' ? 'block' : 'none';
+            
+            loadContent();
+        }
+
+        async function loadContent() {
+            if (currentMode === 'practice') {
+                await loadExercises();
+            } else {
+                await loadTextCorrection();
+            }
+        }
+
+        async function loadExercises() {
+            try {
+                const language = document.getElementById('language-select').value;
+                const difficulty = document.getElementById('difficulty-select').value;
+                const punctuationMark = document.getElementById('punctuation-select').value;
+                
+                const params = new URLSearchParams({
+                    language,
+                    difficulty,
+                    count: totalExercises
+                });
+                
+                if (punctuationMark) params.append('punctuationMark', punctuationMark);
+
+                const response = await fetch(`/api/punctuation/practice?${params}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (response.ok) {
+                    exercises = await response.json();
+                    currentExerciseIndex = 0;
+                    showCurrentExercise();
+                } else {
+                    throw new Error('Failed to load exercises');
+                }
+            } catch (error) {
+                console.error('Error loading exercises:', error);
+                document.getElementById('exercise-content').innerHTML = `
+                    <div class="alert alert-error">
+                        <span>Failed to load exercises. Please try again.</span>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadTextCorrection() {
+            try {
+                const language = document.getElementById('language-select').value;
+                const difficulty = document.getElementById('difficulty-select').value;
+                
+                const params = new URLSearchParams({ language, difficulty });
+
+                const response = await fetch(`/api/punctuation/text-correction?${params}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (response.ok) {
+                    const exercise = await response.json();
+                    currentExercise = exercise;
+                    originalText = exercise.text;
+                    displayTextCorrection();
+                } else {
+                    throw new Error('Failed to load text correction exercise');
+                }
+            } catch (error) {
+                console.error('Error loading text correction:', error);
+                document.getElementById('correction-content').innerHTML = `
+                    <div class="alert alert-error">
+                        <span>Failed to load text correction exercise. Please try again.</span>
+                    </div>
+                `;
+            }
+        }
+
+        function showCurrentExercise() {
+            if (currentExerciseIndex >= exercises.length) {
+                showCompletionMessage();
+                return;
+            }
+
+            currentExercise = exercises[currentExerciseIndex];
+            startTime = Date.now();
+            
+            updateProgress();
+            displayExercise();
+            document.getElementById('exercise-actions').style.display = 'flex';
+        }
+
+        function displayExercise() {
+            const content = document.getElementById('exercise-content');
+            const difficultyBadge = document.getElementById('difficulty-badge');
+            
+            difficultyBadge.textContent = currentExercise.difficulty.charAt(0).toUpperCase() + currentExercise.difficulty.slice(1);
+            difficultyBadge.className = `badge ${getDifficultyColor(currentExercise.difficulty)}`;
+
+            let html = `<div class="mb-4">
+                <h3 class="text-lg font-semibold mb-2">${currentExercise.question || 'Complete the sentence with correct punctuation:'}</h3>
+                <div class="bg-base-200 p-4 rounded-lg mb-4">
+                    <p class="text-lg">${currentExercise.text}</p>
+                </div>
+            `;
+
+            if (currentExercise.type === 'multiple-choice') {
+                html += '<div class="space-y-2">';
+                currentExercise.options.forEach((option, index) => {
+                    html += `
+                        <label class="flex items-center space-x-2 cursor-pointer hover:bg-base-200 p-2 rounded">
+                            <input type="radio" name="answer" value="${option.text}" class="radio radio-secondary">
+                            <span>${option.text}</span>
+                        </label>
+                    `;
+                });
+                html += '</div>';
+            } else {
+                html += `
+                    <textarea class="textarea textarea-bordered w-full" 
+                              placeholder="Type your answer here..." 
+                              id="answer-input"></textarea>
+                `;
+            }
+
+            html += '</div>';
+            content.innerHTML = html;
+        }
+
+        function displayTextCorrection() {
+            const content = document.getElementById('correction-content');
+            
+            const html = `
+                <div class="mb-4">
+                    <textarea class="textarea textarea-bordered w-full h-40" 
+                              id="correction-text"
+                              placeholder="Correct the punctuation in this text...">${currentExercise.text}</textarea>
+                </div>
+            `;
+            
+            content.innerHTML = html;
+            document.getElementById('correction-actions').style.display = 'flex';
+        }
+
+        function getDifficultyColor(difficulty) {
+            switch (difficulty) {
+                case 'beginner': return 'badge-success';
+                case 'intermediate': return 'badge-warning';
+                case 'advanced': return 'badge-error';
+                default: return 'badge-secondary';
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentExerciseIndex) / totalExercises) * 100;
+            document.getElementById('progress-bar').value = progress;
+            document.getElementById('progress-text').textContent = `${currentExerciseIndex}/${totalExercises}`;
+        }
+
+        async function submitAnswer() {
+            let answer = '';
+            
+            if (currentExercise.type === 'multiple-choice') {
+                const selected = document.querySelector('input[name="answer"]:checked');
+                if (!selected) {
+                    alert('Please select an answer');
+                    return;
+                }
+                answer = selected.value;
+            } else {
+                answer = document.getElementById('answer-input').value.trim();
+                if (!answer) {
+                    alert('Please provide an answer');
+                    return;
+                }
+            }
+
+            await submitExerciseAnswer(answer);
+        }
+
+        async function submitCorrection() {
+            const correctedText = document.getElementById('correction-text').value.trim();
+            if (!correctedText) {
+                alert('Please provide a corrected text');
+                return;
+            }
+
+            await submitExerciseAnswer(correctedText);
+        }
+
+        async function submitExerciseAnswer(answer) {
+            const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+
+            try {
+                const response = await fetch('/api/punctuation/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        exerciseId: currentExercise._id,
+                        answer,
+                        timeSpent
+                    })
+                });
+
+                const result = await response.json();
+                showResult(result);
+            } catch (error) {
+                console.error('Error submitting answer:', error);
+                alert('Failed to submit answer. Please try again.');
+            }
+        }
+
+        function showResult(result) {
+            const modal = document.getElementById('result-modal');
+            const title = document.getElementById('result-title');
+            const content = document.getElementById('result-content');
+
+            title.textContent = result.correct ? '✅ Correct!' : '❌ Incorrect';
+            title.className = `font-bold text-lg ${result.correct ? 'text-success' : 'text-error'}`;
+
+            let html = `
+                <div class="space-y-4">
+                    <div class="alert ${result.correct ? 'alert-success' : 'alert-error'}">
+                        <span>${result.correct ? 'Well done!' : 'Not quite right.'}</span>
+                    </div>
+            `;
+
+            if (!result.correct) {
+                html += `
+                    <div class="bg-base-200 p-4 rounded">
+                        <strong>Correct Answer:</strong><br>
+                        <span class="font-mono">${result.correctAnswer}</span>
+                    </div>
+                `;
+            }
+
+            if (result.explanation) {
+                html += `
+                    <div class="bg-base-200 p-4 rounded">
+                        <strong>Explanation:</strong> ${result.explanation}
+                    </div>
+                `;
+            }
+
+            html += `
+                    <div class="stats shadow">
+                        <div class="stat">
+                            <div class="stat-title">Experience Gained</div>
+                            <div class="stat-value text-secondary">+${result.experienceGained}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            content.innerHTML = html;
+            modal.showModal();
+        }
+
+        function nextExercise() {
+            document.getElementById('result-modal').close();
+            
+            if (currentMode === 'practice') {
+                currentExerciseIndex++;
+                showCurrentExercise();
+            } else {
+                loadTextCorrection();
+            }
+        }
+
+        function showHint() {
+            if (currentExercise.hints && currentExercise.hints.length > 0) {
+                alert(`💡 Hint: ${currentExercise.hints[0]}`);
+            } else {
+                alert('💡 Hint: Pay attention to sentence structure and pauses in meaning.');
+            }
+        }
+
+        function resetText() {
+            document.getElementById('correction-text').value = originalText;
+        }
+
+        function showCompletionMessage() {
+            document.getElementById('exercise-content').innerHTML = `
+                <div class="text-center py-8">
+                    <div class="text-6xl mb-4">🎉</div>
+                    <h2 class="text-2xl font-bold mb-4">Excellent Work!</h2>
+                    <p class="mb-6">You've completed all punctuation exercises!</p>
+                    <button class="btn btn-secondary" onclick="loadExercises()">Practice Again</button>
+                </div>
+            `;
+            document.getElementById('exercise-actions').style.display = 'none';
+        }
+
+        // Settings change handlers
+        document.getElementById('language-select').addEventListener('change', loadContent);
+        document.getElementById('difficulty-select').addEventListener('change', loadContent);
+        document.getElementById('punctuation-select').addEventListener('change', loadContent);
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+        }
+    </script>
+</body>
+</html>

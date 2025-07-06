@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - LinguaLearn</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-base-100">
+    <div class="min-h-screen flex items-center justify-center">
+        <div class="card w-96 bg-base-100 shadow-xl">
+            <div class="card-body text-center">
+                <div id="loading" class="space-y-4">
+                    <span class="loading loading-spinner loading-lg text-primary"></span>
+                    <h2 class="card-title justify-center">Verifying Email...</h2>
+                    <p>Please wait while we verify your email address.</p>
+                </div>
+                
+                <div id="success" class="space-y-4" style="display: none;">
+                    <div class="text-6xl">✅</div>
+                    <h2 class="card-title justify-center text-success">Email Verified!</h2>
+                    <p>Your email has been successfully verified. You can now access all features of LinguaLearn.</p>
+                    <div class="card-actions justify-center">
+                        <a href="/login" class="btn btn-primary">Continue to Login</a>
+                    </div>
+                </div>
+                
+                <div id="error" class="space-y-4" style="display: none;">
+                    <div class="text-6xl">❌</div>
+                    <h2 class="card-title justify-center text-error">Verification Failed</h2>
+                    <p id="error-message">The verification link is invalid or has expired.</p>
+                    <div class="card-actions justify-center">
+                        <a href="/login" class="btn btn-outline">Back to Login</a>
+                        <button onclick="resendVerification()" class="btn btn-primary">Resend Email</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get token from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = window.location.pathname.split('/').pop();
+
+        async function verifyEmail() {
+            try {
+                const response = await fetch(`/api/auth/verify-email/${token}`);
+                const data = await response.json();
+
+                document.getElementById('loading').style.display = 'none';
+
+                if (response.ok) {
+                    document.getElementById('success').style.display = 'block';
+                } else {
+                    document.getElementById('error-message').textContent = data.message || 'Verification failed';
+                    document.getElementById('error').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error-message').textContent = 'Network error. Please try again.';
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        async function resendVerification() {
+            const email = prompt('Please enter your email address:');
+            if (!email) return;
+
+            try {
+                const response = await fetch('/api/auth/resend-verification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+                alert(data.message);
+            } catch (error) {
+                console.error('Resend error:', error);
+                alert('Failed to resend verification email. Please try again.');
+            }
+        }
+
+        // Start verification when page loads
+        verifyEmail();
+    </script>
+</body>
+</html>
